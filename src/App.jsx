@@ -4,7 +4,7 @@ import Login from "./pages/login"
 export default class App extends React.Component{
   render() {
     return <Switch>
-      <Login />
+      <Route path="./login" component={Login}/>
     </Switch>
   }
 }
