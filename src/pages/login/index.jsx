@@ -1,15 +1,21 @@
 import React from "react";
-import "./index.css";
+import "./index.less";
 import {Form, Icon, Input, Button} from "antd";
+import { answer } from "../../api/axios/index"
 import logo from "./logo.png"
 const Item = Form.Item;
 class Login extends React.Component{
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFields( async (err, values) => {
       if (!err) {
         const {username,password} = values;
-        console.log(username,password);
+        const result =await answer(username,password);
+        if (result){
+          this.props.history.replace("/");
+        }else {
+          this.props.form.resetFields(["password"])
+        }
       }else {
         console.log("校验失败",err);
       }
@@ -25,45 +31,45 @@ class Login extends React.Component{
           <section className="login-content">
             <h2>用户登录</h2>
             <Form onSubmit={this.handleSubmit} className="login-form">
-                <Item>
-                  {
-                    getFieldDecorator(
-                      'username',
-                      {
-                        rules: [
-                          {required: true, message: '请输入用户名！'},
-                          {min: 4, message: '用户名必须大于4位'},
-                          {max: 15, message: '用户名必须小于15位'},
-                          {pattern: /^[a-zA-Z_0-9]+$/, message: '用户名只能包含英文字母、数字和下划线'},
-                          {
-                            validator: this.validator
-                          }
-                        ]
-                      }
-                    )(
-                      <Input className="login-input" prefix={<Icon type="user" />} placeholder="用户名"/>
-                    )
-                  }
-                </Item>
               <Item>
                 {
                   getFieldDecorator(
-                    'password',
+                    'username',
                     {
                       rules: [
-                        {required: true, message: '请输入密码！'},
-                        {min: 4, message: '密码必须大于4位'},
-                        {max: 15, message: '密码必须小于15位'},
-                        {pattern: /^[a-zA-Z_0-9]+$/, message: '密码只能包含英文字母、数字和下划线'},
+                        {required: true, message: '请输入用户名！'},
+                        {min: 4, message: '用户名必须大于4位'},
+                        {max: 15, message: '用户名必须小于15位'},
+                        {pattern: /^[a-zA-Z_0-9]+$/, message: '用户名只能包含英文字母、数字和下划线'},
                         {
                           validator: this.validator
                         }
                       ]
                     }
                   )(
-                    <Input className="login-input" prefix={<Icon type="lock" />} placeholder="密码"/>
+                    <Input className="login-input" prefix={<Icon type="user" />} placeholder="用户名"/>
                   )
                 }
+              </Item>
+              <Item>
+              {
+                getFieldDecorator(
+                  'password',
+                  {
+                    rules: [
+                      {required: true, message: '请输入密码！'},
+                      {min: 4, message: '密码必须大于4位'},
+                      {max: 15, message: '密码必须小于15位'},
+                      {pattern: /^[a-zA-Z_0-9]+$/, message: '密码只能包含英文字母、数字和下划线'},
+                      {
+                        validator: this.validator
+                      }
+                    ]
+                  }
+                )(
+                  <Input className="login-input" prefix={<Icon type="lock" />} placeholder="密码" type="password"/>
+                )
+              }
               </Item>
               <Button type="primary" htmlType="submit" className="login-form-button">
                 登录
@@ -71,7 +77,6 @@ class Login extends React.Component{
             </Form>
           </section>
       </div>
-
   }
 }
 export default Form.create()(Login);
