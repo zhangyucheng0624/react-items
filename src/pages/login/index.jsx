@@ -2,7 +2,7 @@ import React from "react";
 import "./index.less";
 import {Form, Icon, Input, Button} from "antd";
 import { answer } from "../../api/axios/index"
-import logo from "./logo.png"
+import logo from "../../assets/imags/logo.png"
 const Item = Form.Item;
 class Login extends React.Component{
   handleSubmit = (e) => {
