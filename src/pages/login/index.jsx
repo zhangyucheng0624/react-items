@@ -1,23 +1,25 @@
 import React from "react";
 import "./index.less";
 import {Form, Icon, Input, Button} from "antd";
-import { answer } from "../../api/axios/index"
-import logo from "../../assets/imags/logo.png"
+import { answer } from "../../api/axios/index";
+import logo from "../../assets/imags/logo.png";
+import {setItem} from "../../utils/islogin"
 const Item = Form.Item;
 class Login extends React.Component{
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.form.validateFields( async (err, values) => {
-      if (!err) {
+    this.props.form.validateFields( async (error, values) => {
+      if (!error) {
         const {username,password} = values;
         const result =await answer(username,password);
         if (result){
+          setItem(result);
           this.props.history.replace("/");
         }else {
           this.props.form.resetFields(["password"])
         }
       }else {
-        console.log("校验失败",err);
+        console.log("校验失败",error);
       }
     });
   };
